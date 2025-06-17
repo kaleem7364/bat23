@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+  <meta charset="UTF-8">
+  <title>الرسم البياني للاستهلاك</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+  <h2>الاستهلاك اليومي للأجهزة</h2>
+
+  <canvas id="usageChart" width="400" height="200"></canvas>
+
+  <div style="margin-top: 20px;">
+    <button onclick="clearData()">مسح البيانات</button>
+    <button onclick="window.location.href='input.html'">إضافة جهاز جديد</button>
+  </div>
+
+  <script>
+    const labels = [];
+    const dataValues = [];
+    let total = 0;
+
+    for (let i = 0; i < localStorage.length; i++) {
+      const key = localStorage.key(i);
+      const val = parseFloat(localStorage.getItem(key));
+      labels.push(key);
+      dataValues.push(val.toFixed(2));
+      total += val;
+    }
+
+    const ctx = document.getElementById('usageChart').getContext('2d');
+    const usageChart = new Chart(ctx, {
+      type: 'bar',
+      data: {
+        labels: labels,
+        datasets: [{
+          label: 'الاستهلاك اليومي (kWh)',
+          data: dataValues,
+          backgroundColor: ['#007bff', '#28a745', '#ffc107', '#dc3545', '#17a2b8'],
+          borderWidth: 1
+        }]
+      },
+      options: {
+        responsive: true,
+        plugins: {
+          legend: { position: 'top' },
+          title: {
+            display: true,
+            text: 'الرسم البياني لاستهلاك الأجهزة'
+          }
+        },
+        scales: {
+          y: {
+            beginAtZero: true,
+            title: { display: true, text: 'kWh' }
+          }
+        }
+      }
+    });
+
+    function clearData() {
+      if (confirm("هل أنت متأكد أنك تريد مسح جميع البيانات؟")) {
+        localStorage.clear();
+        location.reload();
+      }
+    }
+  </script>
+</body>
+</html>
