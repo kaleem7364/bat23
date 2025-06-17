@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+  <meta charset="UTF-8">
+  <title>تقارير المشرف</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+  <h2>تقارير استهلاك الكهرباء</h2>
+
+  <div class="report-section">
+    <canvas id="reportChart"></canvas>
+    <div id="reportSummary" class="summary-box"></div>
+  </div>
+
+  <button onclick="window.location.href='admin.html'">رجوع</button>
+
+  <script>
+    const labels = [];
+    const dataValues = [];
+    let total = 0;
+
+    for (let i = 0; i < localStorage.length; i++) {
+      const key = localStorage.key(i);
+      const val = parseFloat(localStorage.getItem(key));
+      labels.push(key);
+      dataValues.push(val.toFixed(2));
+      total += val;
+    }
+
+    document.getElementById("reportSummary").innerHTML = `
+      <h3>إجمالي الاستهلاك</h3>
+      <p><strong>${total.toFixed(2)} kWh</strong></p>
+      <h4>عدد الأجهزة: ${labels.length}</h4>
+    `;
+
+    new Chart(document.getElementById("reportChart").getContext("2d"), {
+      type: "pie",
+      data: {
+        labels: labels,
+        datasets: [{
+          label: "استهلاك الكهرباء",
+          data: dataValues,
+          backgroundColor: ['#007bff', '#ffc107', '#28a745', '#dc3545', '#17a2b8', '#6610f2']
+        }]
+      },
+      options: {
+        plugins: {
+          title: {
+            display: true,
+            text: "نسبة استهلاك الأجهزة"
+          },
+          legend: {
+            position: 'bottom'
+          }
+        }
+      }
+    });
+  </script>
+</body>
+</html>
