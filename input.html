@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+  <meta charset="UTF-8">
+  <title>إدخال بيانات الأجهزة</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <h2>إدخال استهلاك جهاز</h2>
+
+  <input type="text" id="device" placeholder="اسم الجهاز"><br>
+  <input type="number" id="watt" placeholder="القدرة بالواط"><br>
+  <input type="number" id="hours" placeholder="عدد ساعات التشغيل"><br>
+  <button onclick="saveData()">حفظ</button>
+
+  <script>
+    function saveData() {
+      const device = document.getElementById("device").value;
+      const watt = parseFloat(document.getElementById("watt").value);
+      const hours = parseFloat(document.getElementById("hours").value);
+
+      if (device && watt > 0 && hours > 0) {
+        const kwh = (watt * hours) / 1000;
+        localStorage.setItem(device, kwh);
+        alert("تم الحفظ بنجاح");
+      } else {
+        alert("يرجى ملء جميع الحقول بشكل صحيح");
+      }
+    }
+  </script>
+</body>
+</html>
